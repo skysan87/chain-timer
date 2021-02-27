@@ -1,0 +1,14 @@
+{
+  "name": "chain-timer",
+  "version": "1.0.0",
+  "description": "MacOSのみ対応。経過時間を通知する。",
+  "main": "./bin/index.js",
+  "bin": {
+    "chaintimer": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node ./bin/index.js"
+  },
+  "author": "skysan87",
+  "license": "MIT"
+}
