@@ -29,7 +29,7 @@ function startTimer() {
  * @param {Number} remainTime 残り時間(秒)
  */
 function notifyWrapTime(remainTime) {
-  const wrapIndex = wrapSecondList.findIndex(item => item.sec === remainTime)
+  const wrapIndex = wrapSecondList.findIndex(item => item.remainSec === remainTime)
   if (wrapIndex >= 0) {
     exec(`say ${wrapSecondList[wrapIndex].text}`)
   }
@@ -77,24 +77,25 @@ function main() {
 
   const wrapList = params.map(value => parseInt(value))
 
-  totalSecond = wrapList.reduce((prev, current) => {
-    return prev + current * 60
-  }, 0)
+  totalSecond = wrapList.reduce((prev, current) => prev + current * 60, 0)
 
-  let count = 0
-  wrapList.forEach(minutes => {
-    count += minutes
-    const sec = totalSecond - count * 60
+  const totalMinutes =  wrapList.reduce((prev, current) => prev + current, 0)
+
+  let passMin = 0
+  wrapList.forEach(wrapMin => {
+    passMin += wrapMin
+    const remainSec = totalSecond - passMin * 60
+    const remainMin = totalMinutes - passMin
+
     wrapSecondList.push({
-      sec,
-      text: (sec > 0) ? `${minutes}分経過しました` : '終了です'
+      remainSec,
+      text: (remainSec > 0) ? `${passMin}分経過しました。残り${remainMin}分です` : '終了です'
     })
   })
 
-  const totalMinutes = wrapList.reduce((prev, current) => prev + current, 0)
   exec(`say ${totalMinutes}分のタイマーを開始します`)
 
-  console.log('中止する場合、Command + C')
+  console.log('中止する場合、Ctrl + C')
 
   startTimer()
 }
